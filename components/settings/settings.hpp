@@ -26,6 +26,9 @@ namespace Settings
         void clear();
         ///< clears all settings and default settings
 
+        void resetCategory(const std::string& category);
+        ///< resets to default all settings in the specified category
+
         void loadDefault (const std::string& file);
         ///< load file as the default settings (can be overridden by user settings)
 

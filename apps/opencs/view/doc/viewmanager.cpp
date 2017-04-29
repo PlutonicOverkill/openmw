@@ -176,6 +176,7 @@ CSVDoc::View *CSVDoc::ViewManager::addView (CSMDoc::Document *document)
     connect (view, SIGNAL (newAddonRequest ()), this, SIGNAL (newAddonRequest()));
     connect (view, SIGNAL (loadDocumentRequest ()), this, SIGNAL (loadDocumentRequest()));
     connect (view, SIGNAL (editSettingsRequest()), this, SIGNAL (editSettingsRequest()));
+    connect (view, SIGNAL (resetKeyBindingsRequest()), this, SIGNAL (resetKeyBindingsRequest()));
     connect (view, SIGNAL (mergeDocument (CSMDoc::Document *)), this, SIGNAL (mergeDocument (CSMDoc::Document *)));
 
     updateIndices();

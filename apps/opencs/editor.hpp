@@ -101,6 +101,8 @@ namespace CS
 
             void showSettings();
 
+            void resetKeyBindings();
+
             void documentAdded (CSMDoc::Document *document);
 
             void documentAboutToBeRemoved (CSMDoc::Document *document);

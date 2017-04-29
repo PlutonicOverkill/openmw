@@ -77,6 +77,8 @@ namespace CSVDoc
 
             void editSettingsRequest();
 
+            void resetKeyBindingsRequest();
+
             void mergeDocument (CSMDoc::Document *document);
 
         public slots:

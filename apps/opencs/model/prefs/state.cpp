@@ -585,6 +585,11 @@ CSMPrefs::State& CSMPrefs::State::get()
     return *sThis;
 }
 
+void CSMPrefs::State::resetCategory(const std::string& category)
+{
+    mSettings.resetCategory(category);
+}
+
 
 CSMPrefs::State& CSMPrefs::get()
 {

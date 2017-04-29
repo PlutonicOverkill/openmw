@@ -54,6 +54,7 @@ CS::Editor::Editor ()
     connect (&mViewManager, SIGNAL (newAddonRequest ()), this, SLOT (createAddon ()));
     connect (&mViewManager, SIGNAL (loadDocumentRequest ()), this, SLOT (loadDocument ()));
     connect (&mViewManager, SIGNAL (editSettingsRequest()), this, SLOT (showSettings ()));
+    connect (&mViewManager, SIGNAL (resetKeyBindingsRequest ()), this, SLOT (resetKeyBindings ()));
     connect (&mViewManager, SIGNAL (mergeDocument (CSMDoc::Document *)), this, SLOT (mergeDocument (CSMDoc::Document *)));
 
     connect (&mStartup, SIGNAL (createGame()), this, SLOT (createGame ()));
@@ -282,6 +283,13 @@ void CS::Editor::showSettings()
     mSettings.move (QCursor::pos());
     mSettings.raise();
     mSettings.activateWindow();
+}
+
+void CS::Editor::resetKeyBindings()
+{
+    mSettingsState.resetCategory("Key Bindings");
+    // force settings to be saved
+    mSettings.close();
 }
 
 bool CS::Editor::makeIPCServer()

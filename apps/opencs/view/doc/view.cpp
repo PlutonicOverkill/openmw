@@ -122,6 +122,10 @@ void CSVDoc::View::setupEditMenu()
     connect (search, SIGNAL (triggered()), this, SLOT (addSearchSubView()));
     setupShortcut("document-edit-search", search);
     edit->addAction (search);
+
+    QAction *resetKeys = new QAction (tr ("Reset Key Bindings"), this);
+    connect (resetKeys, SIGNAL (triggered()), this, SIGNAL (resetKeyBindingsRequest()));
+    edit->addAction (resetKeys);
 }
 
 void CSVDoc::View::setupViewMenu()

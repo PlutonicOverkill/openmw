@@ -360,6 +360,21 @@ void Manager::clear()
     mChangedSettings.clear();
 }
 
+void Manager::resetCategory(const std::string& category)
+{
+    for (CategorySettingValueMap::iterator i = mUserSettings.begin(); i != mUserSettings.end(); ++i)
+    {
+        // if the category matches
+        if (i->first.first == category)
+        {
+            // mark the setting as changed
+            mChangedSettings.insert(std::make_pair(i->first.first, i->first.second));
+            // reset the value to the default
+            i->second = mDefaultSettings[i->first];
+        }
+    }
+}
+
 void Manager::loadDefault(const std::string &file)
 {
     SettingsFileParser parser;
