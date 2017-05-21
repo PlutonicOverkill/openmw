@@ -8,6 +8,8 @@
 
 #include <osg/ref_ptr>
 
+#include "terrainselection.hpp"
+
 #include "../../model/world/cellcoordinates.hpp"
 
 class QModelIndex;
@@ -48,6 +50,7 @@ namespace CSVRender
             osg::ref_ptr<osg::Group> mCellNode;
             std::map<std::string, Object *> mObjects;
             std::auto_ptr<Terrain::TerrainGrid> mTerrain;
+            std::auto_ptr<TerrainSelection> mTerrainSelection;
             CSMWorld::CellCoordinates mCoordinates;
             std::auto_ptr<CellArrow> mCellArrows[4];
             std::auto_ptr<CellMarker> mCellMarker;
@@ -89,6 +92,8 @@ namespace CSVRender
                 bool deleted = false);
 
             ~Cell();
+
+            TerrainTextureSelection* getTerrainTextureSelection() const;
 
             /// \note Returns the pathgrid representation which will exist as long as the cell exists
             Pathgrid* getPathgrid() const;

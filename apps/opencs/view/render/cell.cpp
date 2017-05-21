@@ -118,6 +118,7 @@ CSVRender::Cell::Cell (CSMWorld::Data& data, osg::Group* rootNode, const std::st
 
         mPathgrid.reset(new Pathgrid(mData, mCellNode, mId, mCoordinates));
         mCellWater.reset(new CellWater(mData, mCellNode, mId, mCoordinates));
+        mTerrainSelection.reset(new TerrainSelection(this));
     }
 }
 
@@ -128,6 +129,11 @@ CSVRender::Cell::~Cell()
         delete iter->second;
 
     mCellNode->getParent(0)->removeChild(mCellNode);
+}
+
+CSVRender::TerrainSelection* CSVRender::Cell::getTerrainSelection() const
+{
+    return mTerrainSelection.get();
 }
 
 CSVRender::Pathgrid* CSVRender::Cell::getPathgrid() const
