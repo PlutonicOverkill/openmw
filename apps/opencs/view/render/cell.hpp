@@ -93,7 +93,7 @@ namespace CSVRender
 
             ~Cell();
 
-            TerrainTextureSelection* getTerrainTextureSelection() const;
+            TerrainSelection* getTerrainSelection() const;
 
             /// \note Returns the pathgrid representation which will exist as long as the cell exists
             Pathgrid* getPathgrid() const;

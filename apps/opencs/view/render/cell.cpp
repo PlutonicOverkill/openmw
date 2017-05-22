@@ -113,12 +113,13 @@ CSVRender::Cell::Cell (CSMWorld::Data& data, osg::Group* rootNode, const std::st
 
                 mCellBorder.reset(new CellBorder(mCellNode, mCoordinates));
                 mCellBorder->buildShape(esmLand);
+
+                mTerrainSelection.reset(new TerrainSelection(this));
             }
         }
 
         mPathgrid.reset(new Pathgrid(mData, mCellNode, mId, mCoordinates));
         mCellWater.reset(new CellWater(mData, mCellNode, mId, mCoordinates));
-        mTerrainSelection.reset(new TerrainSelection(this));
     }
 }
 

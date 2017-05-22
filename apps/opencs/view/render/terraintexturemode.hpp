@@ -10,18 +10,27 @@
 
 namespace CSVRender
 {
+    class Cell;
+
     class TerrainTextureMode : public EditMode
     {
+        Q_OBJECT
 
-            Q_OBJECT
+            Cell* mLastSelectedCell;
 
         public:
 
             TerrainTextureMode(WorldspaceWidget* worldspaceWidget, QWidget* parent = 0);
 
-            virtual void primarySelectPressed (const WorldspaceHitResult& hit);
+            virtual void primarySelectPressed (const WorldspaceHitResult&);
 
-            virtual void secondarySelectPressed (const WorldspaceHitResult& hit);
+            virtual void secondarySelectPressed (const WorldspaceHitResult&);
+
+        private:
+
+            void deselectAll(const WorldspaceHitResult&);
+
+            void deselectLastSelectedCell();
     };
 }
 

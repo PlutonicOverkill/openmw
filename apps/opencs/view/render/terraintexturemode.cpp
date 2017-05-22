@@ -9,19 +9,18 @@
 
 CSVRender::TerrainTextureMode::TerrainTextureMode(WorldspaceWidget* worldspaceWidget, QWidget* parent)
     :EditMode(worldspaceWidget, QIcon(":placeholder"), Mask_Terrain, "Terrain texture editing",
-        parent), mSelection()
+        parent), mLastSelectedCell(0)
 {
 }
 
 void CSVRender::TerrainTextureMode::primarySelectPressed(const WorldspaceHitResult& hit)
 {
+    deselectAll(hit);
+
     if (hit.hit)
     {
-        //mSelection.setSelected(toTextureCoords(hit.worldPos));
-    }
-    else
-    {
-        //mSelection.deselectAll();
+        // select the activated item
+        // mSelection.setSelected(toTextureCoords(hit.worldPos));
     }
 }
 
@@ -29,22 +28,28 @@ void CSVRender::TerrainTextureMode::secondarySelectPressed(const WorldspaceHitRe
 {
     if (hit.hit)
     {
-        //mSelection.toggleSelected(toTextureCoords(hit.worldPos));
+        deselectLastSelectedCell();
+        // toggle selection of activated item
+
+        // mSelection.toggleSelected(toTextureCoords(hit.worldPos));
+    }
+    else
+    {
+        deselectAll(hit);
     }
 }
 
-/* TODO: move this to CSVRender::Cell
-CSVRender::TerrainTextureMode::TexturePos CSVRender::TerrainTextureMode::toTextureCoords(osg::Vec3d worldPos)
+void CSVRender::TerrainTextureMode::deselectAll(const WorldspaceHitResult& hit)
 {
-Cell* cell = getWorldspaceWidget().getCell(worldPos);
-assert(cell);
+    getWorldspaceWidget().getCell(hit.worldPos)->getTerrainSelection(TerrainSelectionType_Texture)->deselectAll();
 
-int cellX = cell->getCoordinates().getX() * ESM::Land::REAL_SIZE;
-int cellY = cell->getCoordinates().getY() * ESM::Land::REAL_SIZE;
-
-int textureX = static_cast<int>((worldPos.x() - cellX) * ESM::Land::LAND_TEXTURE_SIZE / ESM::Land::REAL_SIZE);
-int textureY = static_cast<int>((worldPos.y() - cellY) * ESM::Land::LAND_TEXTURE_SIZE / ESM::Land::REAL_SIZE);
-
-return std::make_pair(textureX, textureY);
+    deselectLastSelectedCell();
 }
-*/
+
+void CSVRender::TerrainTextureMode::deselectLastSelectedCell()
+{
+    if (mLastSelectedCell)
+    {
+        mLastSelectedCell->getTerrainSelection(TerrainSelectionType_Texture)->deselectAll();
+    }
+}
