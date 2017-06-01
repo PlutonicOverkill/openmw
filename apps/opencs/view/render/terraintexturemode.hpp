@@ -3,34 +3,25 @@
 
 #include "editmode.hpp"
 
-#include <osg/Vec3d>
-
-#include <vector>
-#include <utility>
-
 namespace CSVRender
 {
     class Cell;
 
     class TerrainTextureMode : public EditMode
     {
-        Q_OBJECT
-
-            Cell* mLastSelectedCell;
+            Q_OBJECT
 
         public:
 
-            TerrainTextureMode(WorldspaceWidget* worldspaceWidget, QWidget* parent = 0);
+            TerrainTextureMode(WorldspaceWidget*, QWidget* parent = 0);
 
-            virtual void primarySelectPressed (const WorldspaceHitResult&);
+            virtual void primarySelectPressed(const WorldspaceHitResult&);
 
-            virtual void secondarySelectPressed (const WorldspaceHitResult&);
+            virtual void secondarySelectPressed(const WorldspaceHitResult&);
 
-        private:
+            virtual void activate(CSVWidget::SceneToolbar* toolbar);
 
-            void deselectAll(const WorldspaceHitResult&);
-
-            void deselectLastSelectedCell();
+            virtual void deactivate(CSVWidget::SceneToolbar* toolbar);
     };
 }
 

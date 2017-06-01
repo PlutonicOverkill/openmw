@@ -2,25 +2,38 @@
 
 #include "mask.hpp"
 #include "worldspacewidget.hpp"
+#include "pagedworldspacewidget.hpp"
 #include "tagbase.hpp"
 #include "cell.hpp"
 
 #include <osg/ref_ptr>
+#include <osg/Vec3d>
 
 CSVRender::TerrainTextureMode::TerrainTextureMode(WorldspaceWidget* worldspaceWidget, QWidget* parent)
     :EditMode(worldspaceWidget, QIcon(":placeholder"), Mask_Terrain, "Terrain texture editing",
-        parent), mLastSelectedCell(0)
+        parent)
 {
+}
+
+void CSVRender::TerrainTextureMode::activate(CSVWidget::SceneToolbar* toolbar)
+{
+    dynamic_cast<PagedWorldspaceWidget&>(getWorldspaceWidget()).setTerrainSelectionMode(TerrainSelectionType_Texture);
+
+    EditMode::activate(toolbar);
+}
+
+void CSVRender::TerrainTextureMode::deactivate(CSVWidget::SceneToolbar* toolbar)
+{
+    dynamic_cast<PagedWorldspaceWidget&>(getWorldspaceWidget()).setTerrainSelectionMode(TerrainSelectionType_None);
+
+    EditMode::deactivate(toolbar);
 }
 
 void CSVRender::TerrainTextureMode::primarySelectPressed(const WorldspaceHitResult& hit)
 {
-    deselectAll(hit);
-
     if (hit.hit)
     {
-        // select the activated item
-        // mSelection.setSelected(toTextureCoords(hit.worldPos));
+        dynamic_cast<PagedWorldspaceWidget&>(getWorldspaceWidget()).selectTerrain(hit.worldPos);
     }
 }
 
@@ -28,28 +41,6 @@ void CSVRender::TerrainTextureMode::secondarySelectPressed(const WorldspaceHitRe
 {
     if (hit.hit)
     {
-        deselectLastSelectedCell();
-        // toggle selection of activated item
-
-        // mSelection.toggleSelected(toTextureCoords(hit.worldPos));
-    }
-    else
-    {
-        deselectAll(hit);
-    }
-}
-
-void CSVRender::TerrainTextureMode::deselectAll(const WorldspaceHitResult& hit)
-{
-    getWorldspaceWidget().getCell(hit.worldPos)->getTerrainSelection(TerrainSelectionType_Texture)->deselectAll();
-
-    deselectLastSelectedCell();
-}
-
-void CSVRender::TerrainTextureMode::deselectLastSelectedCell()
-{
-    if (mLastSelectedCell)
-    {
-        mLastSelectedCell->getTerrainSelection(TerrainSelectionType_Texture)->deselectAll();
+        dynamic_cast<PagedWorldspaceWidget&>(getWorldspaceWidget()).toggleSelectTerrain(hit.worldPos);
     }
 }

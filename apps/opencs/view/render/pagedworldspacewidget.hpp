@@ -7,6 +7,7 @@
 
 #include "worldspacewidget.hpp"
 #include "cell.hpp"
+#include "terrainselection.hpp"
 
 namespace CSVWidget
 {
@@ -134,6 +135,12 @@ namespace CSVRender
 
             /// Erase all overrides and restore the visual representation to its true state.
             virtual void reset (unsigned int elementMask);
+
+            void setTerrainSelectionMode(TerrainSelectionType);
+
+            void selectTerrain(osg::Vec3d worldPos);
+
+            void toggleSelectTerrain(osg::Vec3d worldPos);
 
         protected:
 

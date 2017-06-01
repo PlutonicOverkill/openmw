@@ -1,9 +1,6 @@
 #ifndef CSV_RENDER_TERRAINSELECTION_H
 #define CSV_RENDER_TERRAINSELECTION_H
 
-#include "terrainselectiontexture.hpp"
-#include "terrainselectionvertex.hpp"
-
 #include <osg/Vec3d>
 
 #include <utility>
@@ -26,10 +23,15 @@ namespace CSVRender
 
     class TerrainSelection
     {
-            Cell* mCell;
+        public:
 
-            TerrainSelectionTexture mTextureSelection;
-            TerrainSelectionVertex mVertexSelection;
+            typedef std::pair<int, int> TerrainPos;
+            typedef std::vector<TerrainPos> Container;
+            typedef std::vector<TerrainPos>::iterator Iterator;
+
+            Cell* mCell;
+            Container mTextureSelection;
+            Container mVertexSelection;
             TerrainSelectionType mSelectionState;
 
             // not implemented
@@ -38,19 +40,21 @@ namespace CSVRender
 
         public:
 
-            typedef std::pair<int, int> TexturePos;
-
             TerrainSelection(Cell*);
 
             ~TerrainSelection();
 
             void setSelectionMode(TerrainSelectionType);
 
+            void select(osg::Vec3d worldPos);
+
+            void toggleSelect(osg::Vec3d worldPos);
+
             void deselectAll();
 
         private:
 
-            TexturePos toTextureCoords(osg::Vec3d worldPos);
+            TerrainPos toTextureCoords(osg::Vec3d worldPos);
     };
 }
 

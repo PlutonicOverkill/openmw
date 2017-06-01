@@ -22,6 +22,7 @@
 #include "cameracontroller.hpp"
 #include "cellarrow.hpp"
 #include "terraintexturemode.hpp"
+#include "terrainshapemode.hpp"
 
 bool CSVRender::PagedWorldspaceWidget::adjustCells()
 {
@@ -134,7 +135,7 @@ void CSVRender::PagedWorldspaceWidget::addEditModeSelectorButtons (
 
     /// \todo replace EditMode with suitable subclasses
     tool->addButton (
-        new EditMode (this, QIcon (":placeholder"), Mask_Reference, "Terrain shape editing"),
+        new TerrainShapeMode (this, tool),
         "terrain-shape");
     tool->addButton (
         new TerrainTextureMode (this, tool),
@@ -721,6 +722,25 @@ void CSVRender::PagedWorldspaceWidget::reset (unsigned int elementMask)
     for (std::map<CSMWorld::CellCoordinates, Cell *>::const_iterator iter = mCells.begin();
         iter!=mCells.end(); ++iter)
         iter->second->reset (elementMask);
+}
+
+void CSVRender::PagedWorldspaceWidget::setTerrainSelectionMode(TerrainSelectionType type)
+{
+    /*
+    for (Cell* cell: cells) {
+        cell->getTerrainSelection()->setSelectionMode(type);
+    }
+    */
+}
+
+void CSVRender::PagedWorldspaceWidget::selectTerrain(osg::Vec3d worldPos)
+{
+
+}
+
+void CSVRender::PagedWorldspaceWidget::toggleSelectTerrain(osg::Vec3d worldPos)
+{
+
 }
 
 CSVWidget::SceneToolToggle2 *CSVRender::PagedWorldspaceWidget::makeControlVisibilitySelector (

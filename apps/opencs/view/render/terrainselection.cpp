@@ -16,19 +16,39 @@ CSVRender::TerrainSelection::~TerrainSelection()
 
 void CSVRender::TerrainSelection::setSelectionMode(TerrainSelectionType type)
 {
-    if (type != mSelectionState)
-    {
-        switch (type)
-        {
-            case TerrainSelectionType_Texture:
-                mTextureSelection = mVertexSelection;
-                break;
+    /*
+    mCurrentSelection->hide(); // is this needed if delete is used?
 
-            case TerrainSelectionType_Vertex:
-                mVertexSelection = mTextureSelection;
-                break;
-        }
+    switch(type){
+        case Terrain:
+            mCurrentSelection = &mTerrainSelection;
+            break;
+        case Texture:
+            mCurrentSelection = &mTextureSelection;
+            break;
     }
+
+    ...
+
+    if(mCurrentSelection != mLastSelected)
+    {
+        delete mCurrentSelection;
+        mCurrentSelection = mLastSelection->clone();
+    }
+
+    mCurrentSelection->show();
+
+    */
+}
+
+void CSVRender::TerrainSelection::select(osg::Vec3d worldPos)
+{
+
+}
+
+void CSVRender::TerrainSelection::toggleSelect(osg::Vec3d worldPos)
+{
+
 }
 
 void CSVRender::TerrainSelection::deselectAll()
@@ -36,7 +56,7 @@ void CSVRender::TerrainSelection::deselectAll()
 
 }
 
-CSVRender::TerrainSelection::TexturePos CSVRender::TerrainSelection::toTextureCoords(osg::Vec3d worldPos)
+CSVRender::TerrainSelection::TerrainPos CSVRender::TerrainSelection::toTextureCoords(osg::Vec3d worldPos)
 {
     int cellX = mCell->getCoordinates().getX() * ESM::Land::REAL_SIZE;
     int cellY = mCell->getCoordinates().getY() * ESM::Land::REAL_SIZE;
