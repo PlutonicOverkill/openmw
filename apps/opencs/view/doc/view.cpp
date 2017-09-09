@@ -13,6 +13,7 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QScrollBar>
+#include <QDesktopServices>
 
 #include "../../model/doc/document.hpp"
 #include "../../model/prefs/state.hpp"
@@ -367,6 +368,15 @@ void CSVDoc::View::setupDebugMenu()
     debug->addAction (runLog);
 }
 
+void CSVDoc::View::setupHelpMenu()
+{
+    QMenu *help = menuBar()->addMenu (tr ("Help"));
+
+    QAction *viewOnlineHelp = new QAction (tr ("View Online Help"), this);
+    connect (viewOnlineHelp, SIGNAL (triggered()), this, SLOT (showOnlineHelp()));
+    help->addAction (viewOnlineHelp);
+}
+
 void CSVDoc::View::setupUi()
 {
     setupFileMenu();
@@ -377,6 +387,7 @@ void CSVDoc::View::setupUi()
     setupCharacterMenu();
     setupAssetsMenu();
     setupDebugMenu();
+    setupHelpMenu();
 }
 
 void CSVDoc::View::setupShortcut(const char* name, QAction* action)
@@ -1030,4 +1041,12 @@ void CSVDoc::View::createScrollArea()
     mScroll->setWidgetResizable(true);
     mScroll->setWidget(&mSubViewWindow);
     setCentralWidget(mScroll);
+}
+
+void CSVDoc::View::showOnlineHelp()
+{
+    // TODO: switch version based on current CS version
+    // i.e: "http://openmw.readthedocs.io/en/openmw-0.42.0/manuals/openmw-cs/index.html"
+
+    QDesktopServices::openUrl(QUrl {"https://openmw.readthedocs.io/en/stable/manuals/openmw-cs/index.html", QUrl::StrictMode});
 }

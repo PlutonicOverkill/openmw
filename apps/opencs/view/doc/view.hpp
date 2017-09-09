@@ -82,6 +82,8 @@ namespace CSVDoc
 
             void setupDebugMenu();
 
+            void setupHelpMenu();
+
             void setupUi();
 
             void setupShortcut(const char* name, QAction* action);
@@ -245,6 +247,8 @@ namespace CSVDoc
             void moveScrollBarToEnd(int min, int max);
 
             void merge();
+
+            void showOnlineHelp();
     };
 }
 
