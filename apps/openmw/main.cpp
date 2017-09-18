@@ -4,6 +4,7 @@
 #include <components/files/configurationmanager.hpp>
 #include <components/files/escape.hpp>
 #include <components/fallback/validate.hpp>
+#include <components/misc/logfile.hpp>
 
 #include <SDL_messagebox.h>
 #include "engine.hpp"

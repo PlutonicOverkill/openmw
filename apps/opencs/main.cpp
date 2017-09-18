@@ -12,6 +12,8 @@
 
 #include "model/world/universalid.hpp"
 
+#include <components/misc/logfile.hpp>
+
 #ifdef Q_OS_MAC
 #include <QDir>
 #endif

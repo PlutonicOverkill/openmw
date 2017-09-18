@@ -85,7 +85,7 @@ add_component_dir (esmterrain
     )
 
 add_component_dir (misc
-    utf8stream stringops resourcehelpers rng messageformatparser
+    utf8stream stringops resourcehelpers rng messageformatparser logfile
     )
 
 IF(NOT WIN32 AND NOT APPLE)
