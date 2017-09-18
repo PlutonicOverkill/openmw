@@ -141,6 +141,7 @@ void CSMPrefs::State::declare()
     declareInt ("tab-width", "Tab Width", 4).
         setTooltip ("Number of characters for tab width").
         setRange (1, 10);
+    declareBool ("auto-indent", "Automatically indent new lines", true);
     EnumValue warningsNormal ("Normal", "Report warnings as warning");
     declareEnum ("warnings", "Warning Mode", warningsNormal).
         addValue ("Ignore", "Do not report warning").
@@ -333,6 +334,8 @@ void CSMPrefs::State::declare()
     declareSubcategory ("Script Editor");
     declareShortcut ("script-editor-comment", "Comment Selection", QKeySequence());
     declareShortcut ("script-editor-uncomment", "Uncomment Selection", QKeySequence());
+    declareShortcut ("script-editor-indent-document", "Auto-indent document", QKeySequence());
+    declareShortcut ("script-editor-indent-selection", "Auto-indent selection", QKeySequence());
 }
 
 void CSMPrefs::State::declareCategory (const std::string& key)

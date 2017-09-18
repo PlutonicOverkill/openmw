@@ -76,7 +76,7 @@ opencs_units (view/world
 opencs_units_noqt (view/world
     subviews enumdelegate vartypedelegate recordstatusdelegate idtypedelegate datadisplaydelegate
     scripthighlighter idvalidator dialoguecreator idcompletiondelegate
-    colordelegate dragdroputils
+    colordelegate dragdroputils scriptindenter
     )
 
 opencs_units (view/widget

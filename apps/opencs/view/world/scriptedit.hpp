@@ -11,6 +11,7 @@
 #include "../../model/world/universalid.hpp"
 
 #include "scripthighlighter.hpp"
+#include "scriptindenter.hpp"
 
 class QRegExp;
 
@@ -58,6 +59,10 @@ namespace CSVWorld
             bool mMarkOccurrences;
             QAction *mCommentAction;
             QAction *mUncommentAction;
+            bool mAutoIndent;
+            QAction *mIndentDocumentAction;
+            QAction *mIndentSelectionAction;
+            ScriptIndenter mIndenter;
 
         protected:
 
@@ -83,6 +88,8 @@ namespace CSVWorld
 
             virtual void contextMenuEvent(QContextMenuEvent *event);
 
+            virtual void keyPressEvent(QKeyEvent *event);
+
         private:
 
             QVector<CSMWorld::UniversalId::Type> mAllowedTypes;
@@ -104,6 +111,8 @@ namespace CSVWorld
             /// \param wrap Whether or not to wrap lines.
             void wrapLines(bool wrap);
 
+            void autoIndent();
+
         private slots:
 
             /// \brief Update editor when related setting is changed.
@@ -123,6 +132,10 @@ namespace CSVWorld
             void commentSelection();
 
             void uncommentSelection();
+
+            void indentDocument();
+
+            void indentSelection();
             
     };
 

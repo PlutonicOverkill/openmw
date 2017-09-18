@@ -1,6 +1,7 @@
 #include "scriptedit.hpp"
 
 #include <algorithm>
+#include <utility>
 
 #include <QDragEnterEvent>
 #include <QRegExp>
@@ -52,6 +53,8 @@ CSVWorld::ScriptEdit::ScriptEdit(
     mMonoFont(QFont("Monospace")),
     mTabCharCount(4),
     mMarkOccurrences(true),
+    mAutoIndent(true),
+    mIndenter(),
     mDocument(document),
     mWhiteListQoutes("^[a-z|_]{1}[a-z|0-9|_]{0,}$", Qt::CaseInsensitive)
 {
@@ -100,6 +103,16 @@ CSVWorld::ScriptEdit::ScriptEdit(
     connect(mUncommentAction, SIGNAL (triggered()), this, SLOT (uncommentSelection()));
     CSMPrefs::Shortcut *uncommentShortcut = new CSMPrefs::Shortcut("script-editor-uncomment", this);
     uncommentShortcut->associateAction(mUncommentAction);
+
+    mIndentDocumentAction = new QAction (tr ("Auto-indent document"), this);
+    connect(mIndentDocumentAction, SIGNAL (triggered()), this, SLOT (indentDocument()));
+    CSMPrefs::Shortcut *indentDocumentShortcut = new CSMPrefs::Shortcut("script-editor-indent-document", this);
+    indentDocumentShortcut->associateAction(mIndentDocumentAction);
+
+    mIndentSelectionAction = new QAction (tr ("Auto-indent selection"), this);
+    connect(mIndentSelectionAction, SIGNAL (triggered()), this, SLOT (indentSelection()));
+    CSMPrefs::Shortcut *indentSelectionShortcut = new CSMPrefs::Shortcut("script-editor-indent-selection", this);
+    indentSelectionShortcut->associateAction(mIndentSelectionAction);
 
     mHighlighter = new ScriptHighlighter (document.getData(), mode, ScriptEdit::document());
 
@@ -220,6 +233,11 @@ void CSVWorld::ScriptEdit::wrapLines(bool wrap)
     }
 }
 
+void CSVWorld::ScriptEdit::autoIndent()
+{
+    // QPlainTextEdit::keyPressEvent(event);
+}
+
 void CSVWorld::ScriptEdit::settingChanged(const CSMPrefs::Setting *setting)
 {
     // Determine which setting was changed.
@@ -251,6 +269,10 @@ void CSVWorld::ScriptEdit::settingChanged(const CSMPrefs::Setting *setting)
         mHighlighter->setMarkedWord("");
         updateHighlighting();
         mHighlighter->setMarkOccurrences(mMarkOccurrences);
+    }
+    else if (*setting == "Scripts/auto-indent")
+    {
+
     }
 }
 
@@ -312,12 +334,7 @@ void CSVWorld::ScriptEdit::markOccurrences()
     {
         QTextCursor cursor = textCursor();
 
-        // prevent infinite recursion with cursor.select(),
-        // which ends up calling this function again
-        // could be fixed with blockSignals, but mDocument is const
-        disconnect(this, SIGNAL(cursorPositionChanged()), this, 0);
         cursor.select(QTextCursor::WordUnderCursor);
-        connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(markOccurrences()));
 
         QString word = cursor.selectedText();
         mHighlighter->setMarkedWord(word.toStdString());
@@ -337,7 +354,8 @@ void CSVWorld::ScriptEdit::commentSelection()
 
     begin.beginEditBlock();
 
-    for (; begin < end; begin.movePosition(QTextCursor::EndOfLine), begin.movePosition(QTextCursor::Right))
+    for (; begin < end; begin.movePosition(QTextCursor::EndOfLine),
+                        begin.movePosition(QTextCursor::Right))
     {
         begin.insertText(";");
     }
@@ -357,7 +375,9 @@ void CSVWorld::ScriptEdit::uncommentSelection()
 
     begin.beginEditBlock();
 
-    for (; begin < end; begin.movePosition(QTextCursor::EndOfLine), begin.movePosition(QTextCursor::Right)) {
+    for (; begin < end; begin.movePosition(QTextCursor::EndOfLine),
+                        begin.movePosition(QTextCursor::Right))
+    {
         begin.select(QTextCursor::LineUnderCursor);
         QString line = begin.selectedText();
 
@@ -384,6 +404,31 @@ void CSVWorld::ScriptEdit::uncommentSelection()
     begin.endEditBlock();
 }
 
+void CSVWorld::ScriptEdit::indentDocument()
+{
+    QTextCursor begin {textCursor()};
+    QTextCursor end {begin};
+
+    begin.movePosition(QTextCursor::Start);
+    end.movePosition(QTextCursor::End);
+
+    mIndenter.indent(std::move(begin), std::move(end));
+}
+
+void CSVWorld::ScriptEdit::indentSelection()
+{
+    QTextCursor begin {textCursor()};
+    QTextCursor end {begin};
+
+    begin.setPosition(begin.selectionStart());
+    // begin.movePosition(QTextCursor::StartOfLine);
+
+    end.setPosition(end.selectionEnd());
+    // end.movePosition(QTextCursor::EndOfLine);
+
+    mIndenter.indent(std::move(begin), std::move(end));
+}
+
 void CSVWorld::ScriptEdit::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
@@ -408,8 +453,19 @@ void CSVWorld::ScriptEdit::contextMenuEvent(QContextMenuEvent *event)
     menu->addAction(mCommentAction);
     menu->addAction(mUncommentAction);
 
+    menu->addAction(mIndentDocumentAction);
+    menu->addAction(mIndentSelectionAction);
+
     menu->exec(event->globalPos());
     delete menu;
+}
+
+void CSVWorld::ScriptEdit::keyPressEvent(QKeyEvent *event)
+{
+    if (mAutoIndent && event->key() == Qt::Key_Return)
+        autoIndent();
+    else
+        QPlainTextEdit::keyPressEvent(event);
 }
 
 void CSVWorld::ScriptEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
