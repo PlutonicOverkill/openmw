@@ -9,6 +9,8 @@
 
 #include "../world/defaultgmsts.hpp"
 
+#include <iostream>
+
 #ifndef Q_MOC_RUN
 #include <components/files/configurationmanager.hpp>
 #endif
@@ -285,6 +287,8 @@ CSMDoc::Document::Document (const Files::ConfigurationManager& configuration,
   mResDir(resDir), mFallbackMap(fallback),
   mRunner (mProjectPath), mDirty (false), mIdCompletionManager(mData)
 {
+    std::cout << "Resource directory: " << mResDir.string() << std::endl;
+
     if (mContentFiles.empty())
         throw std::runtime_error ("Empty content file sequence");
 
@@ -522,4 +526,9 @@ CSMWorld::IdCompletionManager &CSMDoc::Document::getIdCompletionManager()
 void CSMDoc::Document::flagAsDirty()
 {
     mDirty = true;
+}
+
+std::string CSMDoc::Document::getResourceDir() const
+{
+    return mResDir.string();
 }

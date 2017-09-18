@@ -15,6 +15,8 @@
 #include <QScrollBar>
 #include <QDesktopServices>
 
+#include <components/version/version.hpp>
+
 #include "../../model/doc/document.hpp"
 #include "../../model/prefs/state.hpp"
 #include "../../model/prefs/shortcut.hpp"
@@ -32,6 +34,8 @@
 #include "globaldebugprofilemenu.hpp"
 #include "runlogsubview.hpp"
 #include "subviewfactoryimp.hpp"
+
+#include <iostream>
 
 void CSVDoc::View::closeEvent (QCloseEvent *event)
 {
@@ -1048,5 +1052,31 @@ void CSVDoc::View::showOnlineHelp()
     // TODO: switch version based on current CS version
     // i.e: "http://openmw.readthedocs.io/en/openmw-0.42.0/manuals/openmw-cs/index.html"
 
-    QDesktopServices::openUrl(QUrl {"https://openmw.readthedocs.io/en/stable/manuals/openmw-cs/index.html", QUrl::StrictMode});
+    Version::Version version;
+    std::string s;
+
+    try {
+        s = mDocument->getResourceDir() + "/resources";
+        std::cout << "Version: " << s << "/version" << std::endl;
+
+    }
+    catch (...) {
+        std::cout << "Something went wrong in getResourceDir()" << std::endl;
+    }
+
+    try {
+        version = Version::getOpenmwVersion(s);
+    }
+    catch (...)
+    {
+        std::cout << "Something went wrong in getOpenmwVersion()" << std::endl;
+    }
+
+
+    // QDesktopServices::openUrl(QUrl {"https://openmw.readthedocs.io/en/stable/manuals/openmw-cs/index.html", QUrl::StrictMode});
+
+    std::cout << "Opening URL: https://openmw.readthedocs.io/en/openmw-" << version.mVersion << "/manuals/openmw-cs/index.html" << std::endl;
+
+    QDesktopServices::openUrl(QUrl {QString::fromStdString("https://openmw.readthedocs.io/en/openmw-"
+        + version.mVersion + "/manuals/openmw-cs/index.html"), QUrl::StrictMode});
 }

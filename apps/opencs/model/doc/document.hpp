@@ -158,6 +158,8 @@ namespace CSMDoc
 
             void flagAsDirty();
 
+            std::string getResourceDir() const;
+
         signals:
 
             void stateChanged (int state, CSMDoc::Document *document);
