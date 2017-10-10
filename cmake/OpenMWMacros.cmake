@@ -169,5 +169,23 @@ macro (openmw_add_executable target)
 		if (CMAKE_VERSION VERSION_GREATER 3.8 OR CMAKE_VERSION VERSION_EQUAL 3.8)
 			set_target_properties(${target} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(TargetDir)")
 		endif (CMAKE_VERSION VERSION_GREATER 3.8 OR CMAKE_VERSION VERSION_EQUAL 3.8)
+
+		add_custom_command (TARGET ${target}
+			POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E echo "- Copying Runtime Resources/Config Files"
+			COMMAND ${CMAKE_COMMAND} -E echo "    gamecontrollerdb.txt"
+			COMMAND ${CMAKE_COMMAND} -E copy gamecontrollerdb.txt $<CONFIG>/gamecontrollerdb.txt
+			COMMAND ${CMAKE_COMMAND} -E echo "    openmw.cfg"
+			COMMAND ${CMAKE_COMMAND} -E copy openmw.cfg.install $<CONFIG>/openmw.cfg
+			COMMAND ${CMAKE_COMMAND} -E echo "    openmw-cs.cfg"
+			COMMAND ${CMAKE_COMMAND} -E copy openmw-cs.cfg $<CONFIG>/openmw-cs.cfg
+			COMMAND ${CMAKE_COMMAND} -E echo "    settings-default.cfg"
+			COMMAND ${CMAKE_COMMAND} -E copy settings-default.cfg $<CONFIG>/settings-default.cfg
+			COMMAND ${CMAKE_COMMAND} -E echo "    resources/"
+			COMMAND ${CMAKE_COMMAND} -E copy_directory resources $<CONFIG>/resources
+			COMMAND ${CMAKE_COMMAND} -E echo
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		)
+
 	endif (MSVC)
 endmacro (openmw_add_executable)
