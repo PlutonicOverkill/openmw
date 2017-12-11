@@ -295,7 +295,7 @@
                             <UserString key="SettingCategory" value="Video"/>
                             <UserString key="SettingName" value="gamma"/>
                             <UserString key="SettingValueType" value="Float"/>
-                            <UserString key="SettingMin" value="0.1"/>
+                            <UserString key="SettingMin" value="0.3"/>
                             <UserString key="SettingMax" value="3.0"/>
                         </Widget>
                         <Widget type="TextBox" skin="SandText" position="0 316 329 18" align="Left Top" name="GammaTextDark">
